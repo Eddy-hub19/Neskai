@@ -1,0 +1,185 @@
+.main {
+  min-height: 100vh;
+  background-color: #0b0c0d;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  color: white;
+  font-family: "Inter", sans-serif;
+
+  .hero {
+    z-index: 1;
+    text-align: center;
+    max-width: 600px;
+    padding: 32px;
+
+    .title {
+      font-size: 96px;
+      font-weight: 900;
+      letter-spacing: -4px;
+      margin: 0;
+      background: linear-gradient(to bottom, #fff 40%, #555 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 0 30px rgba(255, 255, 255, 0.1));
+    }
+
+    .tagline {
+      font-size: 19px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 8px;
+      padding-bottom: 48px;
+      font-weight: 300;
+    }
+
+    .authContent {
+      .userBadge {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        padding: 12.8px 24px;
+        border-radius: 100px;
+        border: 1px solid var(--line-cyan-soft);
+        margin-bottom: 40px;
+        backdrop-filter: blur(10px);
+
+        .email {
+          font-size: 0.9rem;
+          color: #ccc;
+        }
+      }
+
+      .buttonGroup {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+      }
+    }
+
+    .unauthContent {
+      .description {
+        color: #b3b1b1;
+        line-height: 1.6;
+        padding-bottom: 40px;
+        font-weight: 300;
+      }
+    }
+
+    .primaryBtn {
+      background: white;
+      color: black;
+      padding: 20px 48px;
+      border-radius: 100px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      border: 1px solid white;
+      width: 100%;
+      max-width: 300px;
+
+      &:hover {
+        background: transparent;
+        color: white;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+      }
+    }
+
+    .secondaryBtn {
+      background: transparent;
+      color: #555;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: underline;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .main {
+    .hero {
+      .title {
+        font-size: 72px;
+        letter-spacing: -2px;
+      }
+
+      .tagline {
+        letter-spacing: 0.3rem;
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    .hero {
+      max-width: 100%;
+      padding: 1.25rem;
+
+      .title {
+        font-size: 56px;
+      }
+
+      .tagline {
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+      }
+
+      .unauthContent {
+        .description {
+          font-size: 0.95rem;
+          margin-bottom: 28px;
+        }
+      }
+
+      .authContent {
+        .userBadge {
+          max-width: 100%;
+          padding: 10px 14px;
+          margin-bottom: 24px;
+
+          .email {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .main {
+    .hero {
+      .title {
+        font-size: 42px;
+        letter-spacing: -1px;
+      }
+
+      .tagline {
+        letter-spacing: 0.18rem;
+        font-size: 0.82rem;
+      }
+
+      .primaryBtn {
+        font-size: 1rem;
+        padding: 16px 28px;
+      }
+    }
+  }
+}

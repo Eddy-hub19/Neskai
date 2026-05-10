@@ -1,0 +1,78 @@
+.presenceCard {
+  margin-bottom: 16px;
+}
+
+.avatarRow {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+}
+
+.avatarItem,
+.moreBadge {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.23);
+  box-shadow:
+    0 5px 22px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+  margin-left: -10px;
+  background: linear-gradient(150deg, #1c232b 8%, #202f3a 48%, #3f2f20 100%);
+  overflow: hidden;
+}
+
+.avatarItem:first-child,
+.moreBadge:first-child {
+  margin-left: 0;
+}
+
+.avatarItem {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.45);
+    z-index: 2;
+  }
+}
+
+.isCurrent {
+  border-color: rgba(104, 230, 170, 0.95);
+  box-shadow:
+    0 0 0 2px rgba(104, 230, 170, 0.25),
+    0 8px 26px rgba(7, 26, 36, 0.9);
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.moreBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.92);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.1));
+}
+
+@media (max-width: 768px) {
+  .presenceCard {
+    margin-bottom: 12px;
+  }
+
+  .avatarItem,
+  .moreBadge {
+    width: 36px;
+    height: 36px;
+  }
+}

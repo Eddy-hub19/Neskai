@@ -1,0 +1,413 @@
+.container {
+  min-height: 100vh;
+  background-color: #0b0c0d;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+
+  .desktopActions {
+    width: min(100%, 500px);
+    margin-bottom: 16px;
+  }
+
+  .title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(180deg, #fff 0%, #666 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .readersList {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .subtitle {
+      font-size: 1.2rem;
+      font-weight: 300;
+      letter-spacing: 0.8rem;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 4rem;
+      text-align: center;
+    }
+
+    .customSelect {
+      appearance: none;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--line-cyan-soft);
+      border-radius: 8px;
+      color: #fff;
+      padding: 8px 35px 8px 15px;
+      font-size: 0.9rem;
+      outline: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.06);
+        border-color: var(--neon-cyan-soft);
+      }
+
+      &:focus {
+        border-color: var(--neon-cyan-soft);
+        box-shadow: 0 0 15px rgba(0, 242, 255, 0.22);
+      }
+
+      option {
+        background: #111;
+        color: #fff;
+      }
+    }
+
+    .inviteLinkActions {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .copyLinkBtn {
+      justify-self: start;
+      border: 1px solid var(--line-cyan-soft);
+      background: rgba(255, 255, 255, 0.04);
+      color: #fff;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        opacity 0.2s ease;
+
+      &:hover:not(:disabled) {
+        transform: translateY(-1px);
+        border-color: var(--neon-cyan-soft);
+        box-shadow: 0 0 10px rgba(0, 242, 255, 0.25);
+      }
+
+      &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+      }
+    }
+
+    .inviteMaskedLine {
+      color: rgba(242, 210, 147, 0.9);
+      font-size: 0.76rem;
+      line-height: 1.35;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+    }
+
+    .inviteMaskedLink {
+      color: rgba(242, 210, 147, 0.96);
+      font-size: 0.76rem;
+      line-height: 1.35;
+      letter-spacing: 0.04em;
+      text-transform: lowercase;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: opacity 0.2s ease;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+
+    .copyStatus {
+      color: rgba(255, 255, 255, 0.58);
+      font-size: 0.76rem;
+      line-height: 1.35;
+    }
+
+    .inviteNotification {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 15px;
+
+      .acceptBtn {
+        font-weight: 600;
+        border: none;
+        background: none;
+        color: var(--neon-cyan);
+        cursor: pointer;
+        transition: color 0.3s ease;
+      }
+    }
+
+    .activeReadingCard {
+      position: relative;
+      border: 1px solid var(--line-cyan);
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+      box-shadow:
+        0 0 0 1px rgba(0, 242, 255, 0.1) inset,
+        0 10px 36px rgba(255, 255, 255, 0.07),
+        0 0 22px rgba(0, 242, 255, 0.18);
+      backdrop-filter: blur(8px);
+      border-radius: 14px;
+      padding: 12px;
+      display: grid;
+      gap: 6px;
+
+      .dismissSessionBtn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        border-radius: 999px;
+        border: 1px solid var(--line-cyan);
+        background: rgba(255, 255, 255, 0.05);
+        color: rgba(255, 255, 255, 0.86);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 15px;
+        line-height: 1;
+        cursor: pointer;
+        transition:
+          background-color 0.2s ease,
+          border-color 0.2s ease,
+          color 0.2s ease;
+
+        &:hover {
+          background: rgba(0, 242, 255, 0.14);
+          border-color: var(--neon-cyan-soft);
+          color: var(--neon-cyan);
+        }
+      }
+
+      .activeReadingTitle {
+        color: rgba(255, 255, 255, 0.74);
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .activeReadingBook {
+        color: #f4f4f4;
+        text-shadow: 0 0 14px rgba(255, 255, 255, 0.16);
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .activeReadingMeta {
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 0.82rem;
+        line-height: 1.45;
+        max-width: calc(100% - 42px);
+      }
+
+      .resumeBtn {
+        justify-self: start;
+        margin-top: 2px;
+        border: 1px solid var(--line-cyan);
+        background: rgba(255, 255, 255, 0.04);
+        color: #f6f6f6;
+        box-shadow: 0 0 16px rgba(0, 242, 255, 0.2);
+        border-radius: 999px;
+        padding: 7px 12px;
+        font-size: 0.78rem;
+        cursor: pointer;
+
+        &:hover {
+          background: rgba(0, 242, 255, 0.12);
+          border-color: var(--neon-cyan-soft);
+          color: var(--neon-cyan);
+        }
+      }
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+
+      .userItem {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--line-cyan-soft);
+        border-radius: 100px;
+        padding: 0.8rem 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.06);
+          border-color: var(--line-cyan);
+          box-shadow: 0 0 12px rgba(0, 242, 255, 0.14);
+        }
+
+        .userInfo {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+
+          .statusDot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 12px rgba(0, 242, 255, 0.6);
+            animation: pulse 2s infinite;
+          }
+
+          .userName {
+            font-size: 0.95rem;
+            color: #ccc;
+            font-weight: 400;
+          }
+        }
+
+        .inviteBtn {
+          background: #fff;
+          color: #000;
+          border: none;
+          border-radius: 100px;
+          padding: 0.5rem 1.2rem;
+          font-size: 0.85rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition:
+            transform 0.2s ease,
+            opacity 0.2s ease;
+
+          &:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+            box-shadow: 0 0 16px rgba(0, 242, 255, 0.22);
+          }
+
+          &:active {
+            transform: scale(0.95);
+          }
+        }
+      }
+    }
+
+    .empty {
+      color: #444;
+      text-align: center;
+      font-style: italic;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+    padding-bottom: calc(108px + env(safe-area-inset-bottom));
+    justify-content: flex-start;
+
+    .desktopActions {
+      display: none;
+    }
+
+    .title {
+      font-size: 2.2rem;
+      letter-spacing: 0.2rem;
+      text-align: center;
+    }
+
+    .readersList {
+      max-width: 100%;
+
+      .subtitle {
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+        letter-spacing: 0.28rem;
+      }
+
+      .list {
+        .userItem {
+          border-radius: 18px;
+          padding: 0.7rem 0.9rem;
+          gap: 10px;
+          align-items: flex-start;
+          flex-direction: column;
+
+          .inviteBtn {
+            width: 100%;
+          }
+        }
+      }
+
+      .activeReadingCard {
+        .resumeBtn {
+          width: 100%;
+          justify-self: stretch;
+        }
+      }
+
+      .inviteLinkActions {
+        .copyLinkBtn {
+          width: 100%;
+          justify-self: stretch;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding-bottom: 110px;
+
+    .title {
+      font-size: 1.7rem;
+      letter-spacing: 0.12rem;
+    }
+
+    .readersList {
+      .subtitle {
+        font-size: 0.8rem;
+        letter-spacing: 0.16rem;
+      }
+
+      .customSelect {
+        width: 100%;
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+.burst {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: radial-gradient(circle, rgba(248, 225, 160, 0.28), rgba(255, 255, 255, 0));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 132;
+}
+
+.lottie {
+  width: 48px;
+  height: 48px;
+}
+
+.fallback {
+  color: rgba(248, 225, 160, 0.98);
+  font-size: 1.45rem;
+  font-weight: 700;
+}

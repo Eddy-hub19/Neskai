@@ -1,0 +1,31 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="80" y1="48" x2="944" y2="976" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#15181F"/>
+      <stop offset="1" stop-color="#050608"/>
+    </linearGradient>
+    <linearGradient id="ring" x1="180" y1="128" x2="866" y2="886" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7DF7FF"/>
+      <stop offset="0.55" stop-color="#00E4FF"/>
+      <stop offset="1" stop-color="#15B6FF"/>
+    </linearGradient>
+    <linearGradient id="glyph" x1="300" y1="244" x2="724" y2="820" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F7FDFF"/>
+      <stop offset="1" stop-color="#A4C9D4"/>
+    </linearGradient>
+    <filter id="glow" x="75" y="75" width="874" height="874" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="26" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1024" height="1024" rx="224" fill="url(#bg)"/>
+  <g filter="url(#glow)">
+    <rect x="144" y="144" width="736" height="736" rx="196" stroke="url(#ring)" stroke-width="42"/>
+  </g>
+
+  <path d="M336 756V268H432L592 520V268H688V756H592L432 506V756H336Z" fill="url(#glyph)"/>
+</svg>
