@@ -4,9 +4,9 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { useParams, useSearchParams } from "next/navigation"
 import { supabase } from "@/lib/supabase"
+import type { RealtimeChannel, User } from "@supabase/supabase-js"
 import SharedReader from "@/app/components/SharedReader/SharedReader"
 import { saveLastReadingSession } from "@/lib/readingSession"
-import type { AnnotationReaction, ReactionType, ThreadMessage } from "@/app/components/SharedReader/lib/types"
 import DesktopTopActions from "@/app/components/DesktopTopActions/DesktopTopActions"
 import styles from "./readingRoom.module.scss"
 
@@ -33,28 +33,6 @@ interface RemoteCursor {
   y: number
   user: string
   isOwner: boolean
-}
-
-type PersistedThread = {
-  id: string
-  annotation_id: number
-  annotation_cfi: string
-}
-
-type PersistedThreadMessage = {
-  id: string
-  annotation_thread_id: string
-  user_id: string
-  content: string
-  created_at: string
-}
-
-type PersistedReaction = {
-  id: string
-  annotation_id: number
-  user_id: string
-  type: ReactionType
-  created_at: string
 }
 
 const USER_COLORS = {
@@ -95,54 +73,16 @@ export default function ReadingRoom() {
 
   const [book, setBook] = useState<RoomBook | null>(null)
   const [participants, setParticipants] = useState<Participant[]>([])
-  const [currentUser, setCurrentUser] = useState<any>(null)
+  const [currentUser, setCurrentUser] = useState<User | null>(null)
   const [incomingCfi, setIncomingCfi] = useState<string | null>(null)
   const [highlights, setHighlights] = useState<HighlightPayload[]>([])
   const [incomingHighlight, setIncomingHighlight] = useState<HighlightPayload | null>(null)
-  const [threadMessages, setThreadMessages] = useState<ThreadMessage[]>([])
-  const [annotationReactions, setAnnotationReactions] = useState<AnnotationReaction[]>([])
   const [remoteCursor, setRemoteCursor] = useState<RemoteCursor | null>(null)
   const isOwner = Boolean(ownerId && currentUser?.id && ownerId === currentUser.id)
   const myHighlightColor = isOwner ? USER_COLORS.owner : USER_COLORS.guest
 
-  const channelRef = useRef<any>(null)
-  const threadIdByCfiRef = useRef<Map<string, string>>(new Map())
+  const channelRef = useRef<RealtimeChannel | null>(null)
   const pendingAnnotationRef = useRef<Map<string, Promise<number | null>>>(new Map())
-  const pendingThreadRef = useRef<Map<string, Promise<string | null>>>(new Map())
-
-  const upsertAnnotationReactions = useCallback((incoming: AnnotationReaction[]) => {
-    if (incoming.length === 0) return
-
-    setAnnotationReactions((prev) => {
-      const byId = new Map<string, AnnotationReaction>()
-
-      for (const reaction of prev) {
-        byId.set(reaction.id, reaction)
-      }
-
-      for (const reaction of incoming) {
-        byId.set(reaction.id, reaction)
-      }
-
-      return Array.from(byId.values()).sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt))
-    })
-  }, [])
-
-  const upsertThreadMessages = useCallback((incoming: ThreadMessage[]) => {
-    setThreadMessages((prev) => {
-      const byId = new Map<string, ThreadMessage>()
-
-      for (const message of prev) {
-        byId.set(message.id, message)
-      }
-
-      for (const message of incoming) {
-        byId.set(message.id, message)
-      }
-
-      return Array.from(byId.values()).sort((a, b) => Date.parse(a.createdAt) - Date.parse(b.createdAt))
-    })
-  }, [])
 
   const findHighlightByCfi = useCallback(
     (cfiRange: string) => highlights.find((item) => item.cfiRange === cfiRange) ?? null,
@@ -237,96 +177,6 @@ export default function ReadingRoom() {
     [fetchAnnotationsFromApi, findHighlightByCfi, numericBookId],
   )
 
-  const ensureThread = useCallback(
-    async (annotationId: number, cfiRange: string) => {
-      const cachedThread = threadIdByCfiRef.current.get(cfiRange)
-      if (cachedThread) {
-        return cachedThread
-      }
-
-      const inFlight = pendingThreadRef.current.get(cfiRange)
-      if (inFlight) {
-        return inFlight
-      }
-
-      const promise = (async () => {
-        if (!numericBookId) return null
-
-        const listResponse = await fetch(`/api/annotations/${annotationId}/threads`, {
-          method: "GET",
-        })
-
-        if (listResponse.ok) {
-          const listPayload = await listResponse.json()
-          const existingThreads = (listPayload?.threads ?? []) as PersistedThread[]
-          const existing = existingThreads.find((thread) => thread.annotation_cfi === cfiRange) ?? existingThreads[0]
-
-          if (existing?.id) {
-            threadIdByCfiRef.current.set(cfiRange, existing.id)
-            return existing.id
-          }
-        }
-
-        const createResponse = await fetch(`/api/annotations/${annotationId}/threads`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cfiRange,
-            bookId: numericBookId,
-          }),
-        })
-
-        if (!createResponse.ok) {
-          return null
-        }
-
-        const createPayload = await createResponse.json()
-        const createdThread = createPayload?.thread as PersistedThread | undefined
-        if (!createdThread?.id) {
-          return null
-        }
-
-        threadIdByCfiRef.current.set(cfiRange, createdThread.id)
-        return createdThread.id
-      })()
-
-      pendingThreadRef.current.set(cfiRange, promise)
-
-      const result = await promise
-      pendingThreadRef.current.delete(cfiRange)
-      return result
-    },
-    [numericBookId],
-  )
-
-  const loadThreadMessages = useCallback(
-    async (threadId: string, cfiRange: string) => {
-      const response = await fetch(`/api/threads/${threadId}/messages?limit=80`, {
-        method: "GET",
-      })
-
-      if (!response.ok) {
-        return
-      }
-
-      const payload = await response.json()
-      const persisted = (payload?.messages ?? []) as PersistedThreadMessage[]
-
-      const mapped = persisted.map((item) => ({
-        id: item.id,
-        annotationCfi: cfiRange,
-        userName: item.user_id === currentUser?.id ? currentUser?.email || "Вы" : "Партнер",
-        content: item.content,
-        createdAt: item.created_at,
-      }))
-
-      upsertThreadMessages(mapped)
-    },
-    [currentUser?.email, currentUser?.id, upsertThreadMessages],
-  )
-
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => setCurrentUser(user))
   }, [])
@@ -342,7 +192,7 @@ export default function ReadingRoom() {
       }
     }
 
-    fetchBook()
+    void fetchBook()
   }, [numericBookId])
 
   useEffect(() => {
@@ -368,7 +218,7 @@ export default function ReadingRoom() {
       setHighlights(loadedHighlights)
     }
 
-    fetchHighlights()
+    void fetchHighlights()
   }, [numericBookId])
 
   useEffect(() => {
@@ -421,49 +271,6 @@ export default function ReadingRoom() {
 
         setRemoteCursor({ x, y, user, isOwner: ownerFlag })
       })
-      .on("broadcast", { event: "thread-message" }, ({ payload }) => {
-        const senderUserId = payload?.user_id as string | undefined
-        if (senderUserId && senderUserId === currentUser.id) return
-
-        const cfiRange = payload?.cfiRange as string | undefined
-        const content = payload?.content as string | undefined
-
-        if (!cfiRange || !content) return
-
-        const nextMessage: ThreadMessage = {
-          id: String(payload?.id ?? `${Date.now()}`),
-          annotationCfi: cfiRange,
-          userName: (payload?.user_name as string | undefined) || "Партнер",
-          content,
-          createdAt: (payload?.createdAt as string | undefined) || new Date().toISOString(),
-        }
-
-        upsertThreadMessages([nextMessage])
-      })
-      .on("broadcast", { event: "thread-reaction" }, ({ payload }) => {
-        const senderUserId = payload?.user_id as string | undefined
-        if (senderUserId && senderUserId === currentUser.id) return
-
-        const reactionId = payload?.id as string | undefined
-        const cfiRange = payload?.cfiRange as string | undefined
-        const annotationIdRaw = payload?.annotationId
-        const annotationId = typeof annotationIdRaw === "number" ? annotationIdRaw : Number(annotationIdRaw)
-        const reaction = payload?.reaction as ReactionType | undefined
-        const createdAt = (payload?.createdAt as string | undefined) || new Date().toISOString()
-
-        if (!reactionId || !cfiRange || !Number.isFinite(annotationId) || !reaction) return
-
-        upsertAnnotationReactions([
-          {
-            id: reactionId,
-            annotationId,
-            cfiRange,
-            type: reaction,
-            createdAt,
-            userId: senderUserId,
-          },
-        ])
-      })
       .subscribe(async (status) => {
         if (status === "SUBSCRIBED") {
           await channel.track({
@@ -477,56 +284,7 @@ export default function ReadingRoom() {
       channel.unsubscribe()
       channelRef.current = null
     }
-  }, [roomId, currentUser, upsertAnnotationReactions, upsertThreadMessages])
-
-  useEffect(() => {
-    const annotationMap = new Map<number, string>()
-
-    for (const item of highlights) {
-      if (item.id) {
-        annotationMap.set(item.id, item.cfiRange)
-      }
-    }
-
-    const annotationIds = Array.from(annotationMap.keys())
-    if (annotationIds.length === 0) {
-      setAnnotationReactions([])
-      return
-    }
-
-    const fetchReactions = async () => {
-      const { data, error } = await supabase
-        .from("reactions")
-        .select("id, annotation_id, user_id, type, created_at")
-        .in("annotation_id", annotationIds)
-        .is("message_id", null)
-
-      if (error) {
-        console.error("Ошибка загрузки реакций:", error)
-        return
-      }
-
-      const mapped = ((data ?? []) as PersistedReaction[]).reduce<AnnotationReaction[]>((acc, item) => {
-        const cfiRange = annotationMap.get(item.annotation_id)
-        if (!cfiRange) return acc
-
-        acc.push({
-          id: item.id,
-          annotationId: item.annotation_id,
-          cfiRange,
-          type: item.type,
-          createdAt: item.created_at,
-          userId: item.user_id,
-        })
-
-        return acc
-      }, [])
-
-      setAnnotationReactions(mapped)
-    }
-
-    fetchReactions()
-  }, [highlights])
+  }, [roomId, currentUser])
 
   useEffect(() => {
     if (!book?.title || !roomId || !stableBookId) {
@@ -550,19 +308,22 @@ export default function ReadingRoom() {
     })
   }, [book?.title, roomId, stableBookId, participants, currentUser?.email])
 
-  const handleLocationChange = useCallback((cfi: string) => {
-    const channel = channelRef.current
-    if (!channel) return
+  const handleLocationChange = useCallback(
+    (cfi: string) => {
+      const channel = channelRef.current
+      if (!channel) return
 
-    channel.send({
-      type: "broadcast",
-      event: "page-change",
-      payload: {
-        cfi,
-        user_id: currentUser?.id,
-      },
-    })
-  }, [currentUser?.id])
+      channel.send({
+        type: "broadcast",
+        event: "page-change",
+        payload: {
+          cfi,
+          user_id: currentUser?.id,
+        },
+      })
+    },
+    [currentUser?.id],
+  )
 
   const handleHighlightCreate = useCallback(
     async ({ cfiRange, color, fontWeight = "normal" }: HighlightPayload) => {
@@ -618,138 +379,6 @@ export default function ReadingRoom() {
     [currentUser?.email, currentUser?.id, isOwner],
   )
 
-  const handleThreadMessageCreate = useCallback(
-    async ({ cfiRange, content }: { cfiRange: string; content: string }) => {
-      if (!currentUser?.id) return
-      if (!numericBookId) return
-
-      const annotationId = await ensureAnnotation(cfiRange, myHighlightColor)
-      if (!annotationId) {
-        return
-      }
-
-      const threadId = await ensureThread(annotationId, cfiRange)
-      if (!threadId) {
-        return
-      }
-
-      const response = await fetch(`/api/threads/${threadId}/messages`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ content }),
-      })
-
-      if (!response.ok) {
-        return
-      }
-
-      const payload = await response.json()
-      const persisted = payload?.message as PersistedThreadMessage | undefined
-      if (!persisted?.id) {
-        return
-      }
-
-      const nextMessage: ThreadMessage = {
-        id: persisted.id,
-        annotationCfi: cfiRange,
-        userName: currentUser.email || "Вы",
-        content: persisted.content,
-        createdAt: persisted.created_at,
-      }
-
-      upsertThreadMessages([nextMessage])
-
-      channelRef.current?.send({
-        type: "broadcast",
-        event: "thread-message",
-        payload: {
-          ...nextMessage,
-          cfiRange,
-          threadId,
-          user_id: currentUser.id,
-          user_name: currentUser.email,
-        },
-      })
-    },
-    [currentUser, ensureAnnotation, ensureThread, myHighlightColor, numericBookId, upsertThreadMessages],
-  )
-
-  const handleQuickReaction = useCallback(
-    async ({ cfiRange, reaction }: { cfiRange: string; reaction: ReactionType }) => {
-      if (!currentUser?.id) return
-
-      const annotationId = await ensureAnnotation(cfiRange, myHighlightColor)
-      if (!annotationId) {
-        return
-      }
-
-      const response = await fetch("/api/reactions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          annotationId,
-          type: reaction,
-        }),
-      })
-
-      if (!response.ok) {
-        return
-      }
-
-      const payload = await response.json()
-      const persisted = payload?.reaction as PersistedReaction | undefined
-
-      if (!persisted?.id || !Number.isFinite(persisted.annotation_id)) {
-        return
-      }
-
-      const nextReaction: AnnotationReaction = {
-        id: persisted.id,
-        annotationId: persisted.annotation_id,
-        cfiRange,
-        type: persisted.type,
-        createdAt: persisted.created_at,
-        userId: persisted.user_id,
-      }
-
-      upsertAnnotationReactions([nextReaction])
-
-      channelRef.current?.send({
-        type: "broadcast",
-        event: "thread-reaction",
-        payload: {
-          id: nextReaction.id,
-          annotationId: nextReaction.annotationId,
-          cfiRange,
-          reaction,
-          user_id: currentUser.id,
-          user_name: currentUser.email,
-          createdAt: nextReaction.createdAt,
-        },
-      })
-    },
-    [currentUser, ensureAnnotation, myHighlightColor, upsertAnnotationReactions],
-  )
-
-  const handleThreadOpen = useCallback(
-    async (cfiRange: string) => {
-      if (!numericBookId) return
-
-      const annotationId = await ensureAnnotation(cfiRange, myHighlightColor)
-      if (!annotationId) return
-
-      const threadId = await ensureThread(annotationId, cfiRange)
-      if (!threadId) return
-
-      await loadThreadMessages(threadId, cfiRange)
-    },
-    [ensureAnnotation, ensureThread, loadThreadMessages, myHighlightColor, numericBookId],
-  )
-
   return (
     <div className={styles.container}>
       <header className={styles.header}>
@@ -768,10 +397,11 @@ export default function ReadingRoom() {
         </div>
       </header>
 
-      <main className={styles.readerArea}>
+      <div className={styles.readerArea}>
         {book ? (
           <div className={styles.readerShell}>
             <SharedReader
+              key={book.file_url}
               bookUrl={resolveBookUrl(book.file_url)}
               bookTitle={book.title}
               showHeader={false}
@@ -782,11 +412,6 @@ export default function ReadingRoom() {
               highlights={highlights}
               incomingHighlight={incomingHighlight}
               onHighlightCreate={handleHighlightCreate}
-              threadMessages={threadMessages}
-              onThreadOpen={handleThreadOpen}
-              onThreadMessageCreate={handleThreadMessageCreate}
-              onQuickReaction={handleQuickReaction}
-              annotationReactions={annotationReactions}
               remoteCursor={remoteCursor}
               onCursorMove={handleCursorMove}
             />
@@ -798,7 +423,7 @@ export default function ReadingRoom() {
             <div className={`${styles.loadingLine} ${styles.shortLine}`} />
           </div>
         )}
-      </main>
+      </div>
     </div>
   )
 }

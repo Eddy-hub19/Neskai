@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { BookOpenText, CircleUserRound, UsersRound } from "lucide-react"
-import styles from "./MobileTabBar.module.scss"
+import styles from "@/app/components/MobileTabBar/MobileTabBar.module.scss"
 
 const navItems = [
   {
@@ -36,7 +36,7 @@ export default function MobileTabBar() {
   }
 
   return (
-    <nav className={styles.tabBar} aria-label="Основная навигация">
+    <nav className={styles.tabBar}>
       {navItems.map((item) => {
         const Icon = item.icon
         const isActive = item.match(pathname)

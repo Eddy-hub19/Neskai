@@ -19,7 +19,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <main className={styles.container}>
+    <div className={styles.container}>
       <section className={styles.card}>
         <DesktopTopActions backHref="/books" className={styles.desktopActions} />
         <p className={styles.kicker}>Профиль</p>
@@ -27,12 +27,6 @@ export default async function ProfilePage() {
         <p className={styles.email}>{user.email}</p>
 
         <div className={styles.actions}>
-          <Link href="/books" className={styles.linkBtn}>
-            Открыть библиотеку
-          </Link>
-          <Link href="/readers" className={styles.linkBtn}>
-            Читаем вместе
-          </Link>
           <form action="/signout" method="post">
             <button className={styles.signoutBtn}>Выйти</button>
           </form>
@@ -40,6 +34,6 @@ export default async function ProfilePage() {
 
         <LastReadingSessionCard />
       </section>
-    </main>
+    </div>
   )
 }

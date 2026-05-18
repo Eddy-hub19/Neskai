@@ -14,49 +14,48 @@ export default async function Home() {
   } = await supabaseServer.auth.getUser()
 
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <div className={styles.hero}>
         <h1 className={styles.title}>Neskai</h1>
-        <p className={styles.tagline}>Future of Collaborative Reading</p>
+        <p className={styles.tagline}>Будущее совместного чтения</p>
 
         {user ? (
           <div className={styles.authContent}>
             <HomePresence />
 
-            <div className={styles.userBadge}>
+            {/* <div className={styles.userBadge}>
               <span className={styles.email}>{user.email}</span>
-            </div>
+            </div> */}
 
             <div className={styles.buttonGroup}>
               <Link href="/books" className={styles.primaryBtn}>
-                Open Library
+                Библиотека
               </Link>
 
               <Link href="/readers" className={styles.primaryBtn}>
-                Reading together
+                Читать вместе
               </Link>
 
               <Link href="/profile" className={styles.primaryBtn}>
-                Profile
+                Профиль
               </Link>
 
               <form action="/signout" method="post">
-                <button className={styles.secondaryBtn}>Sign Out</button>
+                <button className={styles.secondaryBtn}>Выйти</button>
               </form>
             </div>
           </div>
         ) : (
           <div className={styles.unauthContent}>
             <p className={styles.description}>
-              Explore the worlds of books together. Highlight important points, share thoughts, and read in real-time on
-              an ultra-futuristic platform.
+              Исследуйте миры книг вместе. Выделяйте важные моменты, делитесь мыслями и читайте в реальном времени на ультра-современной платформе.
             </p>
             <Link href="/login" className={styles.primaryBtn}>
-              Start your journey →
+              Начать путешествие →
             </Link>
           </div>
         )}
       </div>
-    </main>
+    </div>
   )
 }

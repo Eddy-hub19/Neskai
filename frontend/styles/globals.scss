@@ -3,10 +3,10 @@ html {
 }
 
 :root {
-  --neon-cyan: #00f2ff;
-  --neon-cyan-soft: rgba(0, 242, 255, 0.45);
-  --line-cyan: rgba(0, 242, 255, 0.24);
-  --line-cyan-soft: rgba(0, 242, 255, 0.14);
+  --neon-cyan: #dbe3e4;
+  --neon-cyan-soft: rgba(192, 204, 205, 0.712);
+  --line-cyan: rgba(199, 210, 210, 0.24);
+  --line-cyan-soft: rgba(189, 201, 202, 0.14);
   --bg-frost: rgba(10, 12, 16, 0.75);
 }
 
@@ -24,6 +24,36 @@ body {
   font-family: Manrope, "Avenir Next", "Segoe UI", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding-top: env(safe-area-inset-top);
+}
+
+/* iOS Safari: globally suppress native long-press menu outside of editable fields. */
+* {
+  -webkit-touch-callout: none !important;
+}
+
+input,
+textarea,
+select,
+[contenteditable="true"] {
+  -webkit-touch-callout: default !important;
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+.epub-container,
+.epub-container * {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+button,
+[role="button"],
+.selection-toolbar,
+.selection-toolbar * {
+  -webkit-user-select: none !important;
+  user-select: none !important;
 }
 
 * {

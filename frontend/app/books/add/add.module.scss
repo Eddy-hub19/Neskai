@@ -82,6 +82,29 @@
     margin-top: -4px;
   }
 
+  .coverPreviewWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: -8px;
+  }
+
+  .coverPreviewLabel {
+    font-size: 0.78rem;
+    color: #9aa8d7;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .coverPreviewImage {
+    width: 170px;
+    max-width: 100%;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.38);
+    object-fit: cover;
+  }
+
   .progressWrap {
     display: flex;
     flex-direction: column;

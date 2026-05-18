@@ -1,14 +1,16 @@
 .main {
-  min-height: 100vh;
+  height: 100vh;
   background-color: #0b0c0d;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
   overflow: hidden;
   color: white;
-  font-family: "Inter", sans-serif;
 
   .hero {
     z-index: 1;
@@ -18,7 +20,6 @@
 
     .title {
       font-size: 96px;
-      font-weight: 900;
       letter-spacing: -4px;
       margin: 0;
       background: linear-gradient(to bottom, #fff 40%, #555 100%);
@@ -29,10 +30,11 @@
     }
 
     .tagline {
-      font-size: 19px;
-      color: #888;
+      font-family: "Urbanist", sans-serif;
+      font-size: 18px;
+      color: #e4dfdf;
       text-transform: uppercase;
-      letter-spacing: 8px;
+      letter-spacing: 6px;
       padding-bottom: 48px;
       font-weight: 300;
     }
@@ -65,7 +67,7 @@
 
     .unauthContent {
       .description {
-        color: #b3b1b1;
+        color: #e4dbdb;
         line-height: 1.6;
         padding-bottom: 40px;
         font-weight: 300;
@@ -73,22 +75,46 @@
     }
 
     .primaryBtn {
-      background: white;
-      color: black;
-      padding: 20px 48px;
-      border-radius: 100px;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1.1rem;
-      transition: all 0.3s ease;
-      border: 1px solid white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
-      max-width: 300px;
+      max-width: 280px;
+      padding: 16px 32px;
+      font-family: "Urbanist", sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.85);
+      color: #0b0c0d;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow:
+        0 4px 30px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 
-      &:hover {
-        background: transparent;
-        color: white;
-        box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+      &:hover,
+      &:focus-visible {
+        outline: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: #ffffff;
+        border-color: rgba(255, 255, 255, 0.6);
+        box-shadow:
+          0 0 25px rgba(255, 255, 255, 0.15),
+          inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+        transform: translateY(-2px);
+      }
+
+      &:active {
+        transform: translateY(-0.5px);
+        background: rgba(255, 255, 255, 0.2);
       }
     }
 
@@ -100,6 +126,19 @@
       font-size: 0.9rem;
       text-decoration: underline;
       transition: color 0.3s ease;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 280px;
+      padding: 16px 32px;
+      font-family: "Urbanist", sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
 
       &:hover {
         color: #fff;

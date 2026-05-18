@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "frontend/db/migrations/**"
+      - "frontend/supabase/migrations/**"
       - ".github/workflows/supabase-migrations.yml"
   workflow_dispatch:
 
@@ -39,7 +39,7 @@ jobs:
       - name: Prepare migration directory for Supabase CLI
         run: |
           mkdir -p supabase/migrations
-          cp -f frontend/db/migrations/*.sql supabase/migrations/
+          cp -f frontend/supabase/migrations/*.sql supabase/migrations/
 
       - name: Link project
         run: supabase link --project-ref "$SUPABASE_PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"

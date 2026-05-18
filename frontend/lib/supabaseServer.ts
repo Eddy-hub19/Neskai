@@ -14,8 +14,6 @@ export function createSupabaseServerClientForRequest(cookieStore: CookieStore, r
         return cookieStore.get(name)?.value
       },
       set(name: string, value: string, options: CookieOptions) {
-        // In Next.js, cookie writes are only allowed in Route Handlers/Server Actions.
-        // We only persist mutations when a mutable NextResponse is provided.
         response?.cookies.set({ name, value, ...options })
       },
       remove(name: string, options: CookieOptions) {

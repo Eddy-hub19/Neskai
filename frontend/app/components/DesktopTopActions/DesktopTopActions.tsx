@@ -10,11 +10,7 @@ type DesktopTopActionsProps = {
   className?: string
 }
 
-export default function DesktopTopActions({
-  backHref,
-  backLabel = "Назад",
-  className = "",
-}: DesktopTopActionsProps) {
+export default function DesktopTopActions({ backHref, backLabel = "Назад", className = "" }: DesktopTopActionsProps) {
   const router = useRouter()
 
   return (
@@ -30,7 +26,6 @@ export default function DesktopTopActions({
 
           router.push(backHref || "/")
         }}
-        aria-label="Вернуться назад"
       >
         <ArrowLeft size={16} aria-hidden="true" />
         <span>{backLabel}</span>

@@ -1,0 +1,66 @@
+.readerRoot {
+  height: 100vh;
+  position: relative;
+}
+
+.coverFallback {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(141, 239, 255, 0.12), transparent 35%),
+    radial-gradient(circle at 80% 74%, rgba(255, 255, 255, 0.06), transparent 38%),
+    #0b0c0d;
+  transition: opacity 0.28s ease;
+  padding: 20px;
+}
+
+.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.coverCard {
+  display: grid;
+  gap: 14px;
+  justify-items: center;
+  text-align: center;
+}
+
+.coverImage {
+  width: min(300px, 72vw);
+  height: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.coverMeta {
+  display: grid;
+  gap: 6px;
+}
+
+.coverTitle {
+  margin: 0;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.coverHint {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.82rem;
+}
+
+.placeholderBook {
+  width: min(300px, 72vw);
+  aspect-ratio: 3 / 4;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: linear-gradient(135deg, #15181c 0%, #0f1114 50%, #151515 100%);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}

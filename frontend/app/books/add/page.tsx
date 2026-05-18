@@ -1,20 +1,84 @@
 "use client"
 
 import { supabase } from "@/lib/supabase"
+import { extractBookMetadata } from "@/lib/bookParser"
 import { formatFileSizeMb, isOverBookUploadLimit, prepareBookUploadFile } from "@/lib/bookUploadCompression"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import styles from "./add.module.scss"
+import DesktopTopActions from "@/app/components/DesktopTopActions/DesktopTopActions"
+
+const uploadCoverToStorage = async (cover: string): Promise<string | null> => {
+  try {
+    const response = await fetch(cover)
+    if (!response.ok) {
+      return null
+    }
+
+    const blob = await response.blob()
+    const extension = blob.type.includes("png") ? "png" : "jpg"
+    const fileName = `cover-${Date.now()}-${Math.random().toString(36).slice(2, 9)}.${extension}`
+
+    const { error } = await supabase.storage.from("book-files").upload(fileName, blob, {
+      cacheControl: "3600",
+      upsert: false,
+      contentType: blob.type || "image/jpeg",
+    })
+
+    if (error) {
+      return null
+    }
+
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("book-files").getPublicUrl(fileName)
+
+    return publicUrl || null
+  } catch {
+    return null
+  }
+}
+
+const normalizeCoverFallback = (cover: string | null): string | null => {
+  if (!cover) return null
+  if (cover.startsWith("data:")) return cover
+  if (cover.startsWith("http://") || cover.startsWith("https://")) return cover
+  return null
+}
 
 export default function AddBookPage() {
   const [title, setTitle] = useState("")
   const [author, setAuthor] = useState("")
   const [file, setFile] = useState<File | null>(null)
+  const [previewCover, setPreviewCover] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [uploadStatus, setUploadStatus] = useState<string | null>(null)
   const [compressionProgress, setCompressionProgress] = useState<number | null>(null)
 
   const router = useRouter()
+
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] ?? null
+    setFile(selectedFile)
+
+    if (!selectedFile) {
+      setPreviewCover(null)
+      return
+    }
+
+    const { title: parsedTitle, author: parsedAuthor, cover } = await extractBookMetadata(selectedFile)
+
+    if (!title && parsedTitle) {
+      setTitle(parsedTitle)
+    }
+
+    if (!author && parsedAuthor) {
+      setAuthor(parsedAuthor)
+    }
+
+    setPreviewCover(cover)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,11 +128,16 @@ export default function AddBookPage() {
         data: { publicUrl },
       } = supabase.storage.from("book-files").getPublicUrl(fileName)
 
+      setUploadStatus("Сохраняем карточку книги...")
+      const uploadedCoverUrl = previewCover ? await uploadCoverToStorage(previewCover) : null
+      const resolvedCoverUrl = uploadedCoverUrl ?? normalizeCoverFallback(previewCover)
+
       const { error: dbError } = await supabase.from("books").insert([
         {
           title,
           author,
           file_url: publicUrl,
+          cover_url: resolvedCoverUrl,
           content: `File: ${uploadFile.name}`,
         },
       ])
@@ -78,9 +147,10 @@ export default function AddBookPage() {
       setUploadStatus("Готово")
       router.push("/books")
       router.refresh()
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Во время загрузки произошла ошибка."
       console.error("Подробная ошибка:", error)
-      alert(`Ошибка: ${error.message || "Во время загрузки произошла ошибка."}`)
+      alert(`Ошибка: ${message}`)
     } finally {
       setIsSubmitting(false)
       setUploadStatus(null)
@@ -89,10 +159,11 @@ export default function AddBookPage() {
   }
 
   return (
-    <main className={styles.container}>
-      <h1 className={styles.title}>Добавить в Neskai</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Добавить свою книгу</h1>
 
       <form onSubmit={handleSubmit} className={styles.form}>
+        <DesktopTopActions backHref="/" className={styles.desktopActions} />
         <div className={styles.inputGroup}>
           <label>Название книги</label>
           <input
@@ -118,16 +189,26 @@ export default function AddBookPage() {
         <div className={styles.inputGroup}>
           <label>Файл книги</label>
           <div className={styles.fileInputWrapper}>
-            <input
-              type="file"
-              accept=".pdf,.epub"
-              onChange={(e) => setFile(e.target.files?.[0] || null)}
-              className={styles.fileInput}
-              required
-            />
-            <p className={styles.hint}>Поддерживаемые форматы: PDF, EPUB (если размер больше 50 MB, файл будет автоматически сжат)</p>
+            <input type="file" accept=".pdf,.epub" onChange={handleFileSelect} className={styles.fileInput} required />
+            <p className={styles.hint}>
+              Поддерживаемые форматы: PDF, EPUB (если размер больше 50 MB, файл будет автоматически сжат)
+            </p>
           </div>
         </div>
+
+        {previewCover && (
+          <div className={styles.coverPreviewWrap}>
+            <p className={styles.coverPreviewLabel}>Распознанная обложка</p>
+            <Image
+              src={previewCover}
+              alt="Превью обложки книги"
+              className={styles.coverPreviewImage}
+              width={170}
+              height={240}
+              unoptimized
+            />
+          </div>
+        )}
 
         {uploadStatus && <p className={styles.status}>{uploadStatus}</p>}
 
@@ -144,6 +225,6 @@ export default function AddBookPage() {
           {isSubmitting ? "Загружаем на сервер..." : "Добавить на полку →"}
         </button>
       </form>
-    </main>
+    </div>
   )
 }

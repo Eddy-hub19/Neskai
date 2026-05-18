@@ -1,18 +1,20 @@
 "use client"
 
 import { supabase } from "@/lib/supabase"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import styles from "@/app/books/books.module.scss"
 import Link from "next/link"
 import { Plus } from "lucide-react"
 import DesktopTopActions from "@/app/components/DesktopTopActions/DesktopTopActions"
 import BookList from "@/app/components/BookList/BookList"
+import BookSearch from "../components/BookSearch/BookSearch"
 
 interface Book {
   id: number
   title: string
   author: string
   cover_url?: string
+  file_url?: string
   onDelete?: (id: number) => void
 }
 
@@ -20,7 +22,7 @@ export default function BooksPage() {
   const [books, setBooks] = useState<Book[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     const { data, error } = await supabase.from("books").select("*").order("id", { ascending: false })
 
     if (error) {
@@ -30,7 +32,7 @@ export default function BooksPage() {
     }
 
     setIsLoading(false)
-  }
+  }, [])
 
   const deleteBook = async (id: number) => {
     const { error } = await supabase.from("books").delete().eq("id", id)
@@ -41,7 +43,16 @@ export default function BooksPage() {
   }
 
   useEffect(() => {
-    fetchBooks()
+    let disposed = false
+    const scheduleFetch = () => {
+      queueMicrotask(() => {
+        if (!disposed) {
+          void fetchBooks()
+        }
+      })
+    }
+
+    scheduleFetch()
 
     const channel = supabase
       .channel("library-changes")
@@ -53,18 +64,19 @@ export default function BooksPage() {
           table: "books",
         },
         () => {
-          fetchBooks()
+          scheduleFetch()
         },
       )
       .subscribe()
 
     return () => {
+      disposed = true
       supabase.removeChannel(channel)
     }
-  }, [])
+  }, [fetchBooks])
 
   return (
-    <main className={styles.main}>
+    <div className={styles.main}>
       <div className={styles.container}>
         <header className={styles.header}>
           <DesktopTopActions backHref="/" className={styles.desktopActions} />
@@ -74,6 +86,7 @@ export default function BooksPage() {
               <h1 className={styles.title}>Neskai</h1>
               <p className={styles.subtitle}>Библиотека</p>
             </div>
+
             <Link href="/books/add" className={styles.addBookBtn}>
               <Plus size={14} aria-hidden="true" />
               <span>Добавить книгу</span>
@@ -81,10 +94,14 @@ export default function BooksPage() {
           </div>
         </header>
 
+        <div className={styles.contentSearch}>
+          <BookSearch onBookAdded={fetchBooks} />
+        </div>
+
         <section className={styles.content}>
           <BookList books={books} onDelete={deleteBook} isLoading={isLoading} />
         </section>
       </div>
-    </main>
+    </div>
   )
 }

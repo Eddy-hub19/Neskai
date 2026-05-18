@@ -33,6 +33,11 @@
     flex-direction: column;
     gap: 1.5rem;
 
+    .activeSessionsList {
+      display: grid;
+      gap: 10px;
+    }
+
     .subtitle {
       font-size: 1.2rem;
       font-weight: 300;
@@ -50,6 +55,7 @@
       border-radius: 8px;
       color: #fff;
       padding: 8px 35px 8px 15px;
+      margin-top: 10px;
       font-size: 0.9rem;
       outline: none;
       cursor: pointer;
@@ -162,9 +168,9 @@
       border: 1px solid var(--line-cyan);
       background: linear-gradient(160deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
       box-shadow:
-        0 0 0 1px rgba(0, 242, 255, 0.1) inset,
+        0 0 0 1px rgba(228, 234, 234, 0.1) inset,
         0 10px 36px rgba(255, 255, 255, 0.07),
-        0 0 22px rgba(0, 242, 255, 0.18);
+        0 0 22px rgba(228, 232, 232, 0.18);
       backdrop-filter: blur(8px);
       border-radius: 14px;
       padding: 12px;
@@ -233,7 +239,7 @@
         cursor: pointer;
 
         &:hover {
-          background: rgba(0, 242, 255, 0.12);
+          background: var(--line-cyan);
           border-color: var(--neon-cyan-soft);
           color: var(--neon-cyan);
         }
@@ -407,6 +413,7 @@
 
       .customSelect {
         width: 100%;
+        margin-top: 10px;
       }
     }
   }

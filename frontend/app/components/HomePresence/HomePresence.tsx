@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import Image from "next/image"
 import { supabase } from "@/lib/supabase"
 import { getSupabaseGoogleAvatar } from "@/lib/authAvatar"
 import styles from "./HomePresence.module.scss"
@@ -138,36 +139,48 @@ export default function HomePresence() {
   const hiddenCount = onlineUsers.length > MAX_VISIBLE_USERS ? onlineUsers.length - MAX_VISIBLE_USERS : 0
 
   return (
-    <section className={styles.presenceCard} aria-label="Users currently online">
+    <section className={styles.presenceContainer}>
+      <div className={styles.presenceHeader}>
+        <span className={styles.pulseDot}></span>
+        <p className={styles.presenceTitle}>Сейчас читают</p>
+      </div>
+
       <div className={styles.avatarRow}>
         {visibleUsers.map((participant) => {
           const isCurrentUser = participant.id === currentUserId
+          const shortName = participant.email.split("@")[0]
 
           return (
-            <div
-              key={participant.id}
-              className={`${styles.avatarItem} ${isCurrentUser ? styles.isCurrent : ""}`}
-              title={participant.email}
-            >
-              <img
+            <div key={participant.id} className={`${styles.avatarWrapper} ${isCurrentUser ? styles.isCurrent : ""}`}>
+              <Image
                 src={resolveAvatarSrc(participant)}
                 alt={participant.name}
                 className={styles.avatarImage}
+                width={40}
+                height={40}
+                sizes="40px"
                 referrerPolicy="no-referrer"
                 onError={(event) => {
                   if (event.currentTarget.dataset.fallbackApplied === "1") {
                     return
                   }
-
                   event.currentTarget.dataset.fallbackApplied = "1"
                   event.currentTarget.src = getRandomAvatarUrl(participant.id)
                 }}
               />
+              <div className={styles.tooltip}>
+                <span className={styles.tooltipName}>{shortName}</span>
+                <span className={styles.tooltipEmail}>{participant.email}</span>
+              </div>
             </div>
           )
         })}
 
-        {hiddenCount > 0 && <div className={styles.moreBadge}>+{hiddenCount}</div>}
+        {hiddenCount > 0 && (
+          <div className={styles.moreBadge}>
+            <span>+{hiddenCount}</span>
+          </div>
+        )}
       </div>
     </section>
   )

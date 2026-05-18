@@ -8,19 +8,21 @@
     "start": "next start",
     "lint": "eslint",
     "db:migration:new": "supabase migration new",
-    "db:push": "supabase db push --db-url \"$SUPABASE_DB_URL\""
+    "db:push": "sh -c 'if [ -n \"$SUPABASE_DB_URL\" ]; then supabase db push --db-url \"$SUPABASE_DB_URL\"; else echo \"SUPABASE_DB_URL is not set, using linked Supabase project\"; supabase db push; fi'"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
     "@supabase/ssr": "^0.10.2",
     "@supabase/supabase-js": "^2.104.1",
     "epubjs": "^0.3.93",
+    "fast-xml-parser": "^5.8.0",
     "framer-motion": "^12.38.0",
     "jszip": "^3.10.1",
     "lottie-react": "^2.4.1",
     "lucide-react": "^1.14.0",
     "next": "16.2.4",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.7.284",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "vaul": "^1.1.2"

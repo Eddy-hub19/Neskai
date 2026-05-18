@@ -1,8 +1,8 @@
-import type { RefObject } from "react"
+import { memo, type PointerEvent, type RefObject } from "react"
 import { motion } from "framer-motion"
 import styles from "../SharedReader.module.scss"
 import { MENU_COLORS, MENU_COLOR_VALUES } from "../lib/constants"
-import type { HighlightWeight, MenuColorKey, ReactionType, SelectionMenuPosition } from "../lib/types"
+import type { HighlightWeight, MenuColorKey, SelectionMenuPosition } from "../lib/types"
 
 type SelectionMenuProps = {
   menuPosition: SelectionMenuPosition
@@ -11,24 +11,25 @@ type SelectionMenuProps = {
   onColorSelect: (color: string) => void
   onToggleWeight: () => void
   onSave: () => void
-  onAddThought: () => void
-  onQuickReaction: (reaction: ReactionType) => void
   getMenuColorClass: (key: MenuColorKey) => string
   selectionMenuRef: RefObject<HTMLDivElement | null>
 }
 
-export function SelectionMenu({
+export const SelectionMenu = memo(function SelectionMenu({
   menuPosition,
   selectedColor,
   selectionWeight,
   onColorSelect,
   onToggleWeight,
   onSave,
-  onAddThought,
-  onQuickReaction,
   getMenuColorClass,
   selectionMenuRef,
 }: SelectionMenuProps) {
+  const handlePointerDown = (e: PointerEvent<HTMLElement>) => {
+    e.preventDefault()
+    e.stopPropagation()
+  }
+
   return (
     <motion.div
       ref={selectionMenuRef}
@@ -38,15 +39,23 @@ export function SelectionMenu({
       transition={{ duration: 0.16 }}
       className={styles.selectionMenu}
       style={{ left: menuPosition.x, top: menuPosition.y }}
+      onPointerDown={handlePointerDown}
     >
       <div className={styles.colorRow}>
         {MENU_COLORS.map((key) => {
           const colorValue = MENU_COLOR_VALUES[key]
           return (
             <button
+              type="button"
               key={key}
               className={`${styles.colorCircle} ${getMenuColorClass(key)} ${selectedColor === colorValue ? styles.activeColor : ""}`}
-              onClick={() => onColorSelect(colorValue)}
+              onPointerDown={(e) => {
+                handlePointerDown(e)
+              }}
+              onPointerUp={(e) => {
+                handlePointerDown(e)
+                onColorSelect(colorValue)
+              }}
             />
           )
         })}
@@ -54,31 +63,35 @@ export function SelectionMenu({
 
       <div className={styles.divider} />
 
-      <button className={`${styles.textBtn} ${selectionWeight === "bold" ? styles.activeTextBtn : ""}`} onClick={onToggleWeight}>
+      <button
+        type="button"
+        className={`${styles.textBtn} ${selectionWeight === "bold" ? styles.activeTextBtn : ""}`}
+        onPointerDown={(e) => {
+          handlePointerDown(e)
+        }}
+        onPointerUp={(e) => {
+          handlePointerDown(e)
+          onToggleWeight()
+        }}
+      >
         B
       </button>
 
       <div className={styles.divider} />
 
-      <button className={`${styles.textBtn} ${styles.saveBtn}`} onClick={onSave}>
+      <button
+        type="button"
+        className={`${styles.textBtn} ${styles.saveBtn}`}
+        onPointerDown={(e) => {
+          handlePointerDown(e)
+        }}
+        onPointerUp={(e) => {
+          handlePointerDown(e)
+          onSave()
+        }}
+      >
         Выделить
       </button>
-
-      <button className={`${styles.textBtn} ${styles.thoughtBtn}`} onClick={onAddThought}>
-        Добавить мысль
-      </button>
-
-      <div className={styles.reactionRow}>
-        <button className={styles.reactionBtn} onClick={() => onQuickReaction("sparkles")}>
-          ✦
-        </button>
-        <button className={styles.reactionBtn} onClick={() => onQuickReaction("feather")}>
-          〰
-        </button>
-        <button className={styles.reactionBtn} onClick={() => onQuickReaction("heart")}>
-          ♡
-        </button>
-      </div>
     </motion.div>
   )
-}
+})

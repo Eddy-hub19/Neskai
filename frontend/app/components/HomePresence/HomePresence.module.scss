@@ -1,68 +1,217 @@
 .presenceCard {
   margin-bottom: 16px;
+
+  .avatarRow {
+    display: flex;
+    align-items: center;
+    min-height: 42px;
+  }
+}
+
+.avatar {
+  &Item {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.23);
+    box-shadow:
+      0 5px 22px rgba(0, 0, 0, 0.5),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    margin-left: -10px;
+    background: linear-gradient(150deg, #1c232b 8%, #202f3a 48%, #3f2f20 100%);
+    overflow: hidden;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease;
+
+    &:first-child {
+      margin-left: 0;
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.45);
+      z-index: 2;
+    }
+  }
+
+  &Image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.more {
+  &Badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.23);
+    box-shadow:
+      0 5px 22px rgba(0, 0, 0, 0.5),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    margin-left: -10px;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.1));
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.92);
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.presenceContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  z-index: 2;
+}
+
+.presenceHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .pulseDot {
+    width: 6px;
+    height: 6px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .presenceTitle {
+    font-family: "Urbanist", sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+  }
 }
 
 .avatarRow {
   display: flex;
   align-items: center;
-  min-height: 42px;
-}
-
-.avatarItem,
-.moreBadge {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.23);
-  box-shadow:
-    0 5px 22px rgba(0, 0, 0, 0.5),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-  margin-left: -10px;
-  background: linear-gradient(150deg, #1c232b 8%, #202f3a 48%, #3f2f20 100%);
-  overflow: hidden;
-}
-
-.avatarItem:first-child,
-.moreBadge:first-child {
-  margin-left: 0;
-}
-
-.avatarItem {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  transition:
-    transform 0.2s ease,
-    border-color 0.2s ease;
+  padding-left: 12px;
+}
+
+.avatarWrapper {
+  position: relative;
+  margin-left: -12px;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+
+  .avatarImage {
+    object-fit: cover;
+    border-radius: 50%;
+
+    border: 2px solid #0b0c0d;
+    background-color: #141517;
+    transition: border-color 0.2s ease;
+  }
+
+  &.isCurrent {
+    .avatarImage {
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+  }
 
   &:hover {
-    transform: translateY(-2px);
-    border-color: rgba(255, 255, 255, 0.45);
-    z-index: 2;
+    transform: translateY(-4px) scale(1.05);
+    z-index: 10;
+
+    .avatarImage {
+      border-color: #ffffff;
+    }
+
+    .tooltip {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
   }
 }
 
-.isCurrent {
-  border-color: rgba(104, 230, 170, 0.95);
-  box-shadow:
-    0 0 0 2px rgba(104, 230, 170, 0.25),
-    0 8px 26px rgba(7, 26, 36, 0.9);
-}
-
-.avatarImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
 .moreBadge {
-  display: inline-flex;
+  position: relative;
+  margin-left: -12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid #0b0c0d;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.92);
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.1));
+  z-index: 1;
+
+  span {
+    font-family: "Urbanist", sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(4px);
+  background: rgba(15, 15, 15, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+
+  .tooltipName {
+    font-family: "Urbanist", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+
+  .tooltipEmail {
+    font-family: "Urbanist", sans-serif;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 @media (max-width: 768px) {
@@ -70,9 +219,17 @@
     margin-bottom: 12px;
   }
 
-  .avatarItem,
-  .moreBadge {
-    width: 36px;
-    height: 36px;
+  .avatar {
+    &Item {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  .more {
+    &Badge {
+      width: 36px;
+      height: 36px;
+    }
   }
 }

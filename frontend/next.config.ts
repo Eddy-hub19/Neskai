@@ -20,6 +20,22 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.supabase.co",
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+
+      {
+        protocol: "https",
+        hostname: "covers.openlibrary.org",
+        pathname: "/**",
+      },
+
+      {
+        protocol: "https",
+        hostname: "www.gutenberg.org",
+        pathname: "/**",
+      },
     ],
   },
 }

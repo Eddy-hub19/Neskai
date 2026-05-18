@@ -1,7 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
+import { Download } from "lucide-react"
 import type { CSSProperties } from "react"
+import { downloadBook } from "@/utils/download"
 import styles from "./BookList.module.scss"
 
 interface Book {
@@ -9,6 +12,7 @@ interface Book {
   title: string
   author: string
   cover_url?: string
+  file_url?: string
 }
 
 interface BookListProps {
@@ -85,6 +89,7 @@ export default function BookList({ books, onDelete, isLoading = false }: BookLis
                 aria-label={`Удалить книгу ${book.title}`}
                 onClick={(e) => {
                   e.preventDefault()
+                  e.stopPropagation()
                   if (confirm("Удалить эту книгу?")) {
                     onDelete?.(book.id)
                   }
@@ -93,8 +98,30 @@ export default function BookList({ books, onDelete, isLoading = false }: BookLis
                 ✕
               </button>
 
+              {book.file_url && (
+                <button
+                  className={styles.downloadBtn}
+                  aria-label={`Скачать книгу ${book.title}`}
+                  title="Скачать на устройство"
+                  onPointerDown={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    void downloadBook(book.file_url as string, book.title)
+                  }}
+                >
+                  <Download size={16} aria-hidden="true" />
+                </button>
+              )}
+
               {book.cover_url ? (
-                <img src={book.cover_url} alt={book.title} className={styles.cover} />
+                <Image
+                  src={book.cover_url}
+                  alt={book.title}
+                  className={styles.cover}
+                  width={320}
+                  height={480}
+                  sizes="(max-width: 768px) 42vw, (max-width: 1200px) 26vw, 200px"
+                />
               ) : (
                 <div className={styles.placeholder} style={getCoverVars(book)}>
                   <span className={styles.embossedTitle}>{book.title}</span>

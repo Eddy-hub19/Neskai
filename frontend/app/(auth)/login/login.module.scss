@@ -8,111 +8,113 @@
   overflow: hidden;
   color: white;
   font-family: "Inter", sans-serif;
-}
 
-.ambientGlow {
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(0, 242, 255, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-.loginCard {
-  z-index: 1;
-  width: 100%;
-  max-width: 420px;
-  padding: 3.5rem;
-  border-radius: 40px;
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(30px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
-}
-
-.logo {
-  font-size: 2.5rem;
-  font-weight: 900;
-  letter-spacing: -2px;
-  margin: 0;
-  background: linear-gradient(to bottom, #fff 40%, #888 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.subtitle {
-  color: #666;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 3px;
-  margin-top: 0.5rem;
-}
-
-.description {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: #999;
-  font-weight: 300;
-  margin-bottom: 2rem;
-}
-
-.googleBtn {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 1rem;
-  background: white;
-  color: black;
-  border: none;
-  border-radius: 15px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow:
-      0 10px 25px rgba(255, 255, 255, 0.16),
-      0 0 16px rgba(0, 242, 255, 0.28);
+  .ambientGlow {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0, 242, 255, 0.12) 0%, rgba(0, 0, 0, 0) 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
   }
 
-  .icon {
-    width: 20px;
-    height: 20px;
-  }
-}
+  .loginCard {
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    padding: 3.5rem;
+    border-radius: 40px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.5);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
 
-.footer {
-  font-size: 0.7rem;
-  color: #333;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -2px;
+      margin: 0;
+      background: linear-gradient(to bottom, #fff 40%, #888 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: #666;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      margin-top: 0.5rem;
+    }
+
+    .description {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #999;
+      font-weight: 300;
+      margin-bottom: 2rem;
+    }
+
+    .googleBtn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 1rem;
+      background: white;
+      color: black;
+      border: none;
+      border-radius: 15px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow:
+          0 10px 25px rgba(255, 255, 255, 0.16),
+          0 0 16px rgba(0, 242, 255, 0.28);
+      }
+
+      .icon {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .footer {
+      font-size: 0.7rem;
+      color: #333;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+  }
 }
 
 @media (max-width: 768px) {
-  .loginCard {
-    max-width: 92vw;
-    padding: 2rem 1.2rem;
-    border-radius: 22px;
-    gap: 1.5rem;
-  }
+  .container {
+    .loginCard {
+      max-width: 92vw;
+      padding: 2rem 1.2rem;
+      border-radius: 22px;
+      gap: 1.5rem;
 
-  .logo {
-    font-size: 2rem;
-  }
+      .logo {
+        font-size: 2rem;
+      }
 
-  .description {
-    font-size: 0.92rem;
-    margin-bottom: 1rem;
+      .description {
+        font-size: 0.92rem;
+        margin-bottom: 1rem;
+      }
+    }
   }
 }

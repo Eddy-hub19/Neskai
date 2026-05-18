@@ -7,8 +7,14 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Collaborative reading in the future",
     start_url: "/",
     display: "standalone",
-    background_color: "#0f1115",
-    theme_color: "#00f2ff",
+    background_color: "#0f0f0f",
+    theme_color: "#0f0f0f",
+    protocol_handlers: [
+      {
+        protocol: "web+neskai",
+        url: "/invite?ph=%s",
+      },
+    ],
     icons: [
       {
         src: "/icon-192x192.png",

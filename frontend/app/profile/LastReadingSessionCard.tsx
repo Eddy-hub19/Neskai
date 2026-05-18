@@ -3,14 +3,14 @@
 import Link from "next/link"
 import { useMemo, useState } from "react"
 import { readLastReadingSession } from "@/lib/readingSession"
-import styles from "./profile.module.scss"
+import styles from "@/app/profile/profile.module.scss"
 
 export default function LastReadingSessionCard() {
   const [session] = useState(() => readLastReadingSession())
 
   const partnersText = useMemo(() => {
     if (!session?.participants?.length) {
-      return "Партнеры не зафиксированы"
+      return "Читатели не зафиксированы"
     }
 
     return session.participants.join(", ")
