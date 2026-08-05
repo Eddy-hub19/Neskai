@@ -26,7 +26,12 @@ export default function BooksPage() {
     const { data, error } = await supabase.from("books").select("*").order("id", { ascending: false })
 
     if (error) {
-      console.error("Error fetching books:", error)
+      console.error(
+        "Error fetching books:",
+        error.message ?? error,
+        error.details ? `details=${error.details}` : "",
+        error.hint ? `hint=${error.hint}` : "",
+      )
     } else {
       setBooks(data as Book[])
     }

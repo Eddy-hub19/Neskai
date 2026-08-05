@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import styles from "./add.module.scss"
 import DesktopTopActions from "@/app/components/DesktopTopActions/DesktopTopActions"
+import { t } from "@/lib/i18n"
 
 const uploadCoverToStorage = async (cover: string): Promise<string | null> => {
   try {
@@ -84,7 +85,7 @@ export default function AddBookPage() {
     e.preventDefault()
 
     if (!file) {
-      alert("Пожалуйста, выберите файл для загрузки.")
+      alert(t("Пожалуйста, выберите файл для загрузки."))
       return
     }
 
@@ -97,12 +98,12 @@ export default function AddBookPage() {
         data: { session },
       } = await supabase.auth.getSession()
       if (!session) {
-        throw new Error("Вы не авторизованы. Пожалуйста, войдите снова.")
+        throw new Error(t("Вы не авторизованы. Пожалуйста, войдите снова."))
       }
 
       const shouldCompress = isOverBookUploadLimit(file.size)
 
-      setUploadStatus(shouldCompress ? "Сжимаем файл до 50 MB перед загрузкой..." : "Готовим файл к загрузке...")
+      setUploadStatus(shouldCompress ? t("Сжимаем файл до 50 MB перед загрузкой...") : t("Готовим файл к загрузке..."))
       if (shouldCompress) {
         setCompressionProgress(0)
       }
@@ -128,7 +129,7 @@ export default function AddBookPage() {
         data: { publicUrl },
       } = supabase.storage.from("book-files").getPublicUrl(fileName)
 
-      setUploadStatus("Сохраняем карточку книги...")
+      setUploadStatus(t("Сохраняем карточку книги..."))
       const uploadedCoverUrl = previewCover ? await uploadCoverToStorage(previewCover) : null
       const resolvedCoverUrl = uploadedCoverUrl ?? normalizeCoverFallback(previewCover)
 
@@ -144,13 +145,13 @@ export default function AddBookPage() {
 
       if (dbError) throw dbError
 
-      setUploadStatus("Готово")
+      setUploadStatus(t("Готово"))
       router.push("/books")
       router.refresh()
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : "Во время загрузки произошла ошибка."
-      console.error("Подробная ошибка:", error)
-      alert(`Ошибка: ${message}`)
+      const message = error instanceof Error ? error.message : t("Во время загрузки произошла ошибка.")
+      console.error(t("Ошибка при добавлении книги:"), error)
+      alert(`${t("Ошибка: {message}", { message })}`)
     } finally {
       setIsSubmitting(false)
       setUploadStatus(null)

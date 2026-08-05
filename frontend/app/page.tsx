@@ -3,6 +3,7 @@ import styles from "@/app/home.module.scss"
 import Link from "next/link"
 import { createSupabaseServerClientForRequest } from "@/lib/supabaseServer"
 import HomePresence from "@/app/components/HomePresence/HomePresence"
+import { t } from "@/lib/i18n"
 
 export default async function Home() {
   const cookieStore = await cookies()
@@ -17,7 +18,7 @@ export default async function Home() {
     <div className={styles.main}>
       <div className={styles.hero}>
         <h1 className={styles.title}>Neskai</h1>
-        <p className={styles.tagline}>Будущее совместного чтения</p>
+        <p className={styles.tagline}>{t("Будущее совместного чтения")}</p>
 
         {user ? (
           <div className={styles.authContent}>
@@ -29,29 +30,29 @@ export default async function Home() {
 
             <div className={styles.buttonGroup}>
               <Link href="/books" className={styles.primaryBtn}>
-                Библиотека
+                {t("Библиотека")}
               </Link>
 
               <Link href="/readers" className={styles.primaryBtn}>
-                Читать вместе
+                {t("Читать вместе")}
               </Link>
 
               <Link href="/profile" className={styles.primaryBtn}>
-                Профиль
+                {t("Профиль")}
               </Link>
 
               <form action="/signout" method="post">
-                <button className={styles.secondaryBtn}>Выйти</button>
+                <button className={styles.secondaryBtn}>{t("Выйти")}</button>
               </form>
             </div>
           </div>
         ) : (
           <div className={styles.unauthContent}>
             <p className={styles.description}>
-              Исследуйте миры книг вместе. Выделяйте важные моменты, делитесь мыслями и читайте в реальном времени на ультра-современной платформе.
+              {t("Исследуйте миры книг вместе. Выделяйте важные моменты, делитесь мыслями и читайте в реальном времени на ультра-современной платформе.")}
             </p>
             <Link href="/login" className={styles.primaryBtn}>
-              Начать путешествие →
+              {t("Начать путешествие →")}
             </Link>
           </div>
         )}

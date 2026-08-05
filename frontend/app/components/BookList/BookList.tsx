@@ -5,6 +5,7 @@ import Image from "next/image"
 import { Download } from "lucide-react"
 import type { CSSProperties } from "react"
 import { downloadBook } from "@/utils/download"
+import { t } from "@/lib/i18n"
 import styles from "./BookList.module.scss"
 
 interface Book {
@@ -68,7 +69,7 @@ export default function BookList({ books, onDelete, isLoading = false }: BookLis
     return (
       <div className={styles.emptyContainer}>
         <div className={styles.emptyContent}>
-          <h3 className={styles.emptyTitle}>В библиотеке пока пусто</h3>
+          <h3 className={styles.emptyTitle}>{t("В библиотеке пока пусто")}</h3>
         </div>
       </div>
     )

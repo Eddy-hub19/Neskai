@@ -5,22 +5,24 @@ import { usePathname } from "next/navigation"
 import { BookOpenText, CircleUserRound, UsersRound } from "lucide-react"
 import styles from "@/app/components/MobileTabBar/MobileTabBar.module.scss"
 
+import { t } from "@/lib/i18n"
+
 const navItems = [
   {
     href: "/books",
-    label: "Библиотека",
+    label: t("Библиотека"),
     icon: BookOpenText,
     match: (pathname: string) => pathname === "/books",
   },
   {
     href: "/readers",
-    label: "Читаем вместе",
+    label: t("Читаем вместе"),
     icon: UsersRound,
     match: (pathname: string) => pathname === "/readers",
   },
   {
     href: "/profile",
-    label: "Профиль",
+    label: t("Профиль"),
     icon: CircleUserRound,
     match: (pathname: string) => pathname === "/profile",
   },

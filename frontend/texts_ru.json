@@ -1,0 +1,434 @@
+[
+  {
+    "path": "app/(auth)/login/page.tsx",
+    "text": "Подключаем Google..."
+  },
+  {
+    "path": "app/(auth)/login/page.tsx",
+    "text": "Продолжить с Google"
+  },
+  {
+    "path": "app/(auth)/login/page.tsx",
+    "text": "Вход в систему"
+  },
+  {
+    "path": "app/(auth)/login/page.tsx",
+    "text": "Авторизуйтесь, чтобы получить доступ к своей библиотеке и функциям совместного чтения."
+  },
+  {
+    "path": "app/api/compress-pdf/route.ts",
+    "text": "Файл не передан."
+  },
+  {
+    "path": "app/api/compress-pdf/route.ts",
+    "text": "Поддерживается только PDF."
+  },
+  {
+    "path": "app/api/compress-pdf/route.ts",
+    "text": "Ghostscript не установлен на сервере. Установите его (например, `brew install ghostscript`) и повторите."
+  },
+  {
+    "path": "app/api/compress-pdf/route.ts",
+    "text": "Не удалось сжать PDF. Проверьте, установлен ли Ghostscript и корректен ли файл."
+  },
+  {
+    "path": "app/api/compress-pdf/route.ts",
+    "text": "Не удалось сжать файл до 50 MB. Минимальный полученный размер: ${(bestOutputBuffer.length / (1024 * 1024)).toFixed(2)} MB."
+  },
+  {
+    "path": "app/api/compress-pdf/route.ts",
+    "text": "Ошибка обработки PDF на сервере."
+  },
+  {
+    "path": "app/api/search/route.ts",
+    "text": "Не удалось скачать файл книги с внешнего сервера"
+  },
+  {
+    "path": "app/api/search/route.ts",
+    "text": "Параметр поиска 'q' обязателен"
+  },
+  {
+    "path": "app/api/search/route.ts",
+    "text": "https:\n\n    if (!response.ok) {\n      throw new Error(\"Внешний каталог книг недоступен\")\n    }\n\n    const data = await response.json()\n\n    if (!data.results || data.results.length === 0) {\n      return NextResponse.json([])\n    }\n\n    \n    const formattedBooks = data.results\n      .slice(0, 8)\n      .map((item: any) => {\n        \n        const epubUrl = item.formats[\"application/epub+zip\"] || null\n        const coverUrl = item.formats[\"image/jpeg\"] || null\n\n        \n        const authorsList = item.authors?.map((a: any) => {\n          if (a.name.includes(\",\")) {\n            const parts = a.name.split(\",\").map((p: string) => p.trim())\n            return"
+  },
+  {
+    "path": "app/api/search/route.ts",
+    "text": "}\n          return a.name\n        }) || [\"Неизвестный автор\"]\n\n        return {\n          id:"
+  },
+  {
+    "path": "app/api/search/route.ts",
+    "text": "Без названия"
+  },
+  {
+    "path": "app/api/search/route.ts",
+    "text": "Ошибка API поиска:"
+  },
+  {
+    "path": "app/auth/callback/route.ts",
+    "text": "ОШИБКА SUPABASE:"
+  },
+  {
+    "path": "app/books/[book]/page.tsx",
+    "text": "Обложка книги ${book.title}"
+  },
+  {
+    "path": "app/books/[book]/page.tsx",
+    "text": "Загрузка..."
+  },
+  {
+    "path": "app/books/[book]/page.tsx",
+    "text": "Книга не найдена"
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": ")\n      if (shouldCompress) {\n        setCompressionProgress(0)\n      }\n\n      const uploadFile = await prepareBookUploadFile(file, {\n        onCompressionProgress: (percent) => setCompressionProgress(percent),\n      })\n\n      setUploadStatus(`Загружаем файл (${formatFileSizeMb(uploadFile.size)})...`)\n      setCompressionProgress(null)\n\n      const fileExt = uploadFile.name.split("
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": ", error)\n      alert(`Ошибка: ${message}`)\n    } finally {\n      setIsSubmitting(false)\n      setUploadStatus(null)\n      setCompressionProgress(null)\n    }\n  }\n\n  return (\n    <div className={styles.container}>\n      <h1 className={styles.title}>Добавить свою книгу</h1>\n\n      <form onSubmit={handleSubmit} className={styles.form}>\n        <DesktopTopActions backHref="
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "className={styles.desktopActions} />\n        <div className={styles.inputGroup}>\n          <label>Название книги</label>\n          <input\n            type="
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "required\n          />\n        </div>\n\n        <div className={styles.inputGroup}>\n          <label>Автор</label>\n          <input\n            type="
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "required\n          />\n        </div>\n\n        <div className={styles.inputGroup}>\n          <label>Файл книги</label>\n          <div className={styles.fileInputWrapper}>\n            <input type="
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "onChange={handleFileSelect} className={styles.fileInput} required />\n            <p className={styles.hint}>\n              Поддерживаемые форматы: PDF, EPUB (если размер больше 50 MB, файл будет автоматически сжат)\n            </p>\n          </div>\n        </div>\n\n        {previewCover && (\n          <div className={styles.coverPreviewWrap}>\n            <p className={styles.coverPreviewLabel}>Распознанная обложка</p>\n            <Image\n              src={previewCover}\n              alt="
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "className={styles.coverPreviewImage}\n              width={170}\n              height={240}\n              unoptimized\n            />\n          </div>\n        )}\n\n        {uploadStatus && <p className={styles.status}>{uploadStatus}</p>}\n\n        {compressionProgress !== null && (\n          <div className={styles.progressWrap}>\n            <div className={styles.progressTrack}>\n              <div className={styles.progressFill} style={{ width: `${compressionProgress}%` }} />\n            </div>\n            <p className={styles.progressText}>Сжатие: {compressionProgress}%</p>\n          </div>\n        )}\n\n        <button type="
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "Добавить свою книгу"
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "Название книги"
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "Автор"
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "Файл книги"
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "Поддерживаемые форматы: PDF, EPUB (если размер больше 50 MB, файл будет автоматически сжат)"
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "Распознанная обложка"
+  },
+  {
+    "path": "app/books/add/page.tsx",
+    "text": "Сжатие: {compressionProgress}%"
+  },
+  {
+    "path": "app/books/page.tsx",
+    "text": "Ошибка при удалении:"
+  },
+  {
+    "path": "app/books/page.tsx",
+    "text": "Библиотека"
+  },
+  {
+    "path": "app/books/page.tsx",
+    "text": "Добавить книгу"
+  },
+  {
+    "path": "app/components/BookList/BookList.tsx",
+    "text": "Удалить книгу ${book.title}"
+  },
+  {
+    "path": "app/components/BookList/BookList.tsx",
+    "text": "Удалить эту книгу?"
+  },
+  {
+    "path": "app/components/BookList/BookList.tsx",
+    "text": "Скачать книгу ${book.title}"
+  },
+  {
+    "path": "app/components/BookList/BookList.tsx",
+    "text": "Скачать на устройство"
+  },
+  {
+    "path": "app/components/BookList/BookList.tsx",
+    "text": "В библиотеке пока пусто"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Сбой при поиске"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Ошибка поиска:"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Для этой книги недоступен файл скачивания."
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Нужно авторизоваться, чтобы добавить книгу"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Не удалось скачать файл книги"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Книга \"${book.title}\" добавлена и готова к чтению!"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Ошибка при добавлении книги:"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Ошибка добавления: ${err.message || \"Неизвестный сбой\"}"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Найти книгу по названию или автору..."
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "ПОИСК"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Скачивание..."
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "+ Читать сразу"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Книг с файлами не найдено"
+  },
+  {
+    "path": "app/components/BookSearch/BookSearch.tsx",
+    "text": "Нет обложки"
+  },
+  {
+    "path": "app/components/DesktopTopActions/DesktopTopActions.tsx",
+    "text": "Назад"
+  },
+  {
+    "path": "app/components/HomePresence/HomePresence.tsx",
+    "text": "https:\n}\n\nconst resolveAvatarSrc = (participant: PresenceUser) => participant.avatarUrl || getRandomAvatarUrl(participant.id)\n\nexport default function HomePresence() {\n  const [currentUserId, setCurrentUserId] = useState<string | null>(null)\n  const [onlineUsers, setOnlineUsers] = useState<PresenceUser[]>([])\n\n  useEffect(() => {\n    let isMounted = true\n\n    const loadCurrentUser = async () => {\n      const {\n        data: { user },\n      } = await supabase.auth.getUser()\n\n      if (!isMounted) return\n      setCurrentUserId(user?.id ?? null)\n    }\n\n    void loadCurrentUser()\n\n    return () => {\n      isMounted = false\n    }\n  }, [])\n\n  useEffect(() => {\n    if (!currentUserId) return\n\n    const channel = supabase.channel(APP_PRESENCE_CHANNEL)\n\n    channel\n      .on(\"presence\", { event: \"sync\" }, () => {\n        const state = channel.presenceState() as Record<string, PresencePayload[]>\n        const flattened = Object.values(state).flatMap((items) => items ?? [])\n\n        const deduped = new Map<string, PresenceUser>()\n\n        for (const participant of flattened) {\n          const id = participant.user_id ?? participant.presence_ref\n          if (!id) continue\n\n          const name = participant.user_name || participant.user_email || \"Reader\"\n          const email = participant.user_email || participant.user_name || \"Reader\"\n          const candidate: PresenceUser = {\n            id,\n            name,\n            email,\n            avatarUrl: participant.avatar_url || participant.google_avatar_url || null,\n            onlineAt: toTimestamp(participant.online_at),\n          }\n\n          const existing = deduped.get(id)\n          if (!existing || existing.onlineAt <= candidate.onlineAt) {\n            deduped.set(id, candidate)\n          }\n        }\n\n        const sortedUsers = Array.from(deduped.values()).sort((a, b) => b.onlineAt - a.onlineAt)\n        setOnlineUsers(sortedUsers)\n      })\n      .subscribe(async (status) => {\n        if (status !== \"SUBSCRIBED\") return\n\n        const {\n          data: { user },\n        } = await supabase.auth.getUser()\n\n        if (!user) return\n\n        const googleAvatar = getSupabaseGoogleAvatar(user)\n\n        await channel.track({\n          user_id: user.id,\n          user_name: user.email,\n          user_email: user.email,\n          avatar_url: googleAvatar,\n          google_avatar_url: googleAvatar,\n          online_at: new Date().toISOString(),\n        })\n      })\n\n    return () => {\n      channel.unsubscribe()\n    }\n  }, [currentUserId])\n\n  const visibleUsers = useMemo(() => onlineUsers.slice(0, MAX_VISIBLE_USERS), [onlineUsers])\n  const hiddenCount = onlineUsers.length > MAX_VISIBLE_USERS ? onlineUsers.length - MAX_VISIBLE_USERS : 0\n\n  return (\n    <section className={styles.presenceContainer}>\n      <div className={styles.presenceHeader}>\n        <span className={styles.pulseDot}></span>\n        <p className={styles.presenceTitle}>Сейчас читают</p>\n      </div>\n\n      <div className={styles.avatarRow}>\n        {visibleUsers.map((participant) => {\n          const isCurrentUser = participant.id === currentUserId\n          const shortName = participant.email.split(\"@\")[0]\n\n          return (\n            <div key={participant.id} className={"
+  },
+  {
+    "path": "app/components/HomePresence/HomePresence.tsx",
+    "text": "Сейчас читают"
+  },
+  {
+    "path": "app/components/MobileTabBar/MobileTabBar.tsx",
+    "text": "Читаем вместе"
+  },
+  {
+    "path": "app/components/MobileTabBar/MobileTabBar.tsx",
+    "text": "Профиль"
+  },
+  {
+    "path": "app/components/SharedReader/ReaderAnnotations.tsx",
+    "text": "Закрыть меню"
+  },
+  {
+    "path": "app/components/SharedReader/ReaderAnnotations.tsx",
+    "text": "Выделить"
+  },
+  {
+    "path": "app/components/SharedReader/SharedReader.tsx",
+    "text": "Закрыть книгу"
+  },
+  {
+    "path": "app/components/SharedReader/SharedReader.tsx",
+    "text": "Настройки чтения"
+  },
+  {
+    "path": "app/components/SharedReader/SharedReader.tsx",
+    "text": "Лента"
+  },
+  {
+    "path": "app/components/SharedReader/SharedReader.tsx",
+    "text": "Страницы"
+  },
+  {
+    "path": "app/components/SharedReader/ui/RemoteCursorOverlay.tsx",
+    "text": "Создатель: ${remoteCursor.user}"
+  },
+  {
+    "path": "app/invite/page.tsx",
+    "text": "Переходим по приглашению..."
+  },
+  {
+    "path": "app/invite/page.tsx",
+    "text": "Загружаем..."
+  },
+  {
+    "path": "app/page.tsx",
+    "text": "Будущее совместного чтения"
+  },
+  {
+    "path": "app/page.tsx",
+    "text": "Читать вместе"
+  },
+  {
+    "path": "app/page.tsx",
+    "text": "Выйти"
+  },
+  {
+    "path": "app/page.tsx",
+    "text": "Исследуйте миры книг вместе. Выделяйте важные моменты, делитесь мыслями и читайте в реальном времени на ультра-современной платформе."
+  },
+  {
+    "path": "app/page.tsx",
+    "text": "Начать путешествие →"
+  },
+  {
+    "path": "app/profile/LastReadingSessionCard.tsx",
+    "text": "Читатели не зафиксированы"
+  },
+  {
+    "path": "app/profile/LastReadingSessionCard.tsx",
+    "text": "Последняя сессия чтения"
+  },
+  {
+    "path": "app/profile/LastReadingSessionCard.tsx",
+    "text": "История совместного чтения появится после первой сессии в комнате."
+  },
+  {
+    "path": "app/profile/LastReadingSessionCard.tsx",
+    "text": "Читал(а) с: {partnersText}"
+  },
+  {
+    "path": "app/profile/LastReadingSessionCard.tsx",
+    "text": "Обновлено: {formattedDate}"
+  },
+  {
+    "path": "app/profile/LastReadingSessionCard.tsx",
+    "text": "Вернуться к книге"
+  },
+  {
+    "path": "app/profile/page.tsx",
+    "text": "Ваш аккаунт"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Ошибка загрузки книг:"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Без напарника"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Скрыть активную сессию"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Приглашение отправлено"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Пригласить читать"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Читаем Вместе"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Кто Онлайн"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "0 ? session.participants.join(\", \") : \"Без напарника\" return ("
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Активная книга"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Вернуться к чтению"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Книга для приглашения:"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Нет доступных книг"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Скопировать ссылку для друга"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Ссылка скопирована"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Не удалось скопировать ссылку"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Напарник открыл ссылку:{\" \"}"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Принять и войти"
+  },
+  {
+    "path": "app/readers/page.tsx",
+    "text": "Сейчас никто не онлайн"
+  },
+  {
+    "path": "app/reading-room/[id]/page.tsx",
+    "text": "className={styles.roomHomeLink}>\n          <h1>Комната Neskai</h1>\n        </Link>\n        <span className={styles.ownerBadge}>{isOwner ?"
+  },
+  {
+    "path": "app/reading-room/[id]/page.tsx",
+    "text": "Комната Neskai"
+  },
+  {
+    "path": "lib/bookParser.ts",
+    "text": "Ошибка при извлечении метаданных книги:"
+  },
+  {
+    "path": "lib/bookUploadCompression.ts",
+    "text": "Не удалось сжать PDF на сервере."
+  },
+  {
+    "path": "lib/bookUploadCompression.ts",
+    "text": "Не удалось сжать файл до 50 MB. Текущий размер после сжатия: ${toMb(compressedFile.size)}. Попробуйте файл меньшего размера."
+  },
+  {
+    "path": "utils/download.ts",
+    "text": "Ошибка загрузки файла: ${response.status}"
+  },
+  {
+    "path": "utils/download.ts",
+    "text": "Не удалось скачать книгу:"
+  },
+  {
+    "path": "utils/download.ts",
+    "text": "Ошибка при скачивании. Проверьте доступ к файлу в хранилище."
+  }
+]

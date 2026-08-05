@@ -4,6 +4,7 @@ import styles from "@/app/(auth)/login/login.module.scss"
 import { supabase } from "@/lib/supabase"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
+import { t } from "@/lib/i18n"
 
 const OAUTH_IN_FLIGHT_KEY = "neskai:oauth-in-flight"
 const OAUTH_IN_FLIGHT_TTL_MS = 60_000
@@ -91,17 +92,17 @@ export default function LoginPage() {
       <div className={styles.loginCard}>
         <div className={styles.header}>
           <h1 className={styles.logo}>Neskai</h1>
-          <p className={styles.subtitle}>Вход в систему</p>
+          <p className={styles.subtitle}>{t("Вход в систему")}</p>
         </div>
 
         <div className={styles.content}>
           <p className={styles.description}>
-            Авторизуйтесь, чтобы получить доступ к своей библиотеке и функциям совместного чтения.
+            {t("Авторизуйтесь, чтобы получить доступ к своей библиотеке и функциям совместного чтения.")}
           </p>
 
           <button className={styles.googleBtn} onClick={() => void handleLogin()} disabled={isStartingOAuth}>
             <Image src="/icon-google.svg" className={styles.icon} width={20} height={20} alt="Google" />
-            <span>{isStartingOAuth ? "Подключаем Google..." : "Продолжить с Google"}</span>
+            <span>{isStartingOAuth ? t("Подключаем Google...") : t("Продолжить с Google")}</span>
           </button>
         </div>
       </div>
